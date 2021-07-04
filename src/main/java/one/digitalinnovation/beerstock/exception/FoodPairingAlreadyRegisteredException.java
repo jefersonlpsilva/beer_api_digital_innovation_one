@@ -1,0 +1,12 @@
+package one.digitalinnovation.beerstock.exception;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ResponseStatus;
+
+@ResponseStatus(HttpStatus.BAD_REQUEST)
+public class FoodPairingAlreadyRegisteredException extends Exception{
+
+    public FoodPairingAlreadyRegisteredException(String foodPairingName) {
+        super(String.format("Food pairing with name %s already registered in the system.", foodPairingName));
+    }
+}

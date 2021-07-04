@@ -64,46 +64,103 @@ Abaixo, seguem links bem bacanas, sobre tópicos mencionados durante a aula:
 |Password | |
 
 
+<h3> BeerStock API Specification 0.0.1 </h3>
+
+<h2> Minhas melhorias </h2>
+<h3> CheckList Resources </h3>
+Verbs Http:
+
+| Uri                       | Method| Description      | Request Stream | Response Steam | Status Code Return |    
+|:------------------------- |:------|:-----------------|:---------------|:---------------|:-------------------|
+| /api/v1/beers/{id}        | PUT | Modifies a beer resource | Beer | n/a | 201 / 204 |
+| /api/v1/foodpairing       | GET | all food pairing in the system | n/a  | Food pairing Collection| 200/204 |
+| /api/v1/foodpairing/{id}  | GET | Get speficic food pairing | n/a  | Food pairing | 200/2004         |
+| /api/v1/foodpairing       | POST | Creates a new entity food pairing in the system. Expects a represention of the food pairing in the body | Beer without the Id specifield | Beer | 201 / 204 |
+| /api/v1/foodpairing/{id}  | DELETE | Deletes a person resource | Person | n/a | 201 / 204 |
+
+
+| Checked| Uri                | Method Verb      | URL Example                          | Body Example | Return       |
+|:------:| :------------------|:-----------------|:-------------------------------------|:-------------|:-------------|
+| [X]    | /api/v1/beers/{id}                         | PUT  | http://localhost:8080/api/v1/beers/1     |  { "id": 1, "name": "Stella Artois", "brand": "AmBev", "max": 10, "quantity": 2, "type": "LAGER"  }     | { "id": 1, "name": "Stella Artois", "brand": "AmBev", "max": 10, "quantity": 2, "type": "LAGER"  }     | { "id": 1, "name": "Stella Artois", "brand": "AmBev", "max": 10, "quantity": 2, "type": "LAGER"  }     | { "id": 1, "name": "Stella Artois", "brand": "AmBev", "max": 10, "quantity": 2, "type": "LAGER"  } |
+| [X]    | /api/v1/foodpairing                        | POST | http://localhost:8080/api/v1/foodpairing |  { "dishName": "Frites and Fried Foods", "recipe": "Even if the Belgians ...", "temperature": "HOT" }           | { "id": 1,  "dishName": "Frites and Fried Foods", "recipe": "Even ",  "temperature": "HOT"}    |
+| [X]    | /api/v1/foodpairing/Frites and Fried Foods | GET  | http://localhost:8080/api/v1/foodpairing/Frites and Fried Foods |    | { "id": 1,  "dishName": "Frites and Fried Foods",  "recipe": "Even if the Belgians ..",   "temperature": "HOT" } |    
+| [X]    | /api/v1/foodpairing                        | GET  | http://localhost:8080/api/v1/foodpairing                        |    | { "dishName": "Frites and Fried Foods", "recipe": "Even if the Belgians ...", "temperature": "HOT" } | { "id": 1,  "dishName": "Frites and Fried Foods", "recipe": "Even ...",  "temperature": "HOT"} |    
+| [X]    | /api/v1/foodpairing/{id}                   | PUT  | http://localhost:8080/api/v1/foodpairing/1                      |    | { "dishName": "Frites and Fried Foods", "recipe": "Even if the Belgians ...", "temperature": "HOT" } | { "id": 1,  "dishName": "Frites and Fried Foods", "recipe": "Even ...",  "temperature": "HOT"} |
+| [X]    | /api/v1/foodpairing/{id}                   | DELTE | http://localhost:8080/api/v1/foodpairing/1                     |    |                                                                                                      |                                                                                                |
+
+<h3> Checklist BeerController </h3>
+
+| Checked| Uri | Verb | Test Controller |         
+|:------:|:----|:------|:---------------|
+|[X]     | /api/v1/beers/{id}        | PUT | whenPUTIsCalledThenABeerIsShoudBeSave() |
+|[X]     | /api/v1/beers/{id}        | PUT | whenPUTIsCalledWithInvalidIdThenNotFoundStatusIsReturned() |
+|[X]     | /api/v1/foodpairing       | POST| whenPostIsCalledThenAFoodPairingIsCreated() | 
+|[X]     | /api/v1/foodpairing       | POST| whenPostIsCalledWithoutRequiredFieldThenAnErrorIsReturned() |
+|[X]     | /api/v1/foodpairing       | GET | whenGetIsCalledWithRegisteredDishNameThenFoundStatusIsReturned() |
+|[X]     | /api/v1/foodpairing       | GET | whenGetIsCalledWithoutRegisteredDishNameThenNotFoundStatusIsReturned() |
+|[X]     | /api/v1/foodpairing/{}    | GET | whenGetListWithFoodPairingIsCalldedThenOkStatusIsReturn() |
+|[X]     | /api/v1/foodpairing/{}    | GET | whenGetListWithoutFoodPairingsIsCalledThenOkStatusIsReturned() |
+|[X]     | /api/v1/foodpairing/{id}  | DELETE | whenDeleteIsCalledWithValidIdThenNoContentStatusIsReturned() |
+|[X]     | /api/v1/foodpairing/{id}  | DELETE | whenDeleteIsCalledWithInvalidIdThenNotFoundStatusIsReturned() |
+|[X]     | /api/v1/foodpairing/{id}  | PUT    | whenPUTIsCalledThenAFoodPairingIsShoudBeSave() |
+|[X]     | /api/v1/foodpairing/{id}  | PUT    | whenPUTIsCalledWithInvalidIdThenNotFoundStatusIsReturned() |
+
+<h3> Checklist Service </h3>
+
+| Checked| Method BeerServices | Test |        
+|:------:|:--------------------|------|
+|[X]     | updateBeer(@PathVariable Long id, @RequestBody @Valid BeerDTO beerDTO) | whenBeerInformedThenItShouldBeCreated() |        
+|[X]     | updateBeer(@PathVariable Long id, @RequestBody @Valid BeerDTO beerDTO) | whenPUTIsCalledWithInvalidIdThenNotFoundStatusIsReturned() |
+|[X]     | createFoodPairing(FoodPairingDTO foodPairingDTO) | whenFoodPairingInformedThenItShouldBeCreated() |
+|[X]     | createFoodPairing(FoodPairingDTO foodPairingDTO) | whenAlreadyRegisteredFoodPairingInformedThenAnExceptionShouldBeThrown() |
+|[X]     | findByDishName(String dishName)  | whenValidFoodPairingNameIsGivenThenReturnAFoodPairing() |
+|[X]     | findByDishName(String dishName)  | whenNotRegisteredFoodPairingNameIsGivenThenThrowAnException() |
+|[X]     | foodPairingService.listAll() | whenListFoodPairingIsCalledThenReturnAListOfFoodPairings() |
+|[X]     | foodPairingService.listAll() | whenListFoodPairingIsCalledThenReturnAnEmptyListOfFoodPairings() |
+|[X]     | updateById(Long id, FoodPairingDTO foodPairingDTO) | whenUpdatedFoodPairingByIdThenItShouldBeSave() |        
+|[X]     | updateById(Long id, FoodPairingDTO foodPairingDTO) | whenUpdateFoodPairingThenAnExceptionShouldBeThrown() |              
+|[X]     | deleteById(Long id) | whenExclusionIsCalledWithValidIdThenAFoodPairingShouldBeDeleted() |
+
+<h2> Versão  inicial realizada pelo instrutor </h2>
 <h3> BeerStock API Specification v1.0 </h3>
 Verbs Http:
 
 | Uri | Method| Description      | Request Stream | Response Steam | Status Code Return |    
 |:----|:------|:-----------------|:---------------|:---------------|:-------------------|
-| /person | GET | all people in the system | n/a  | Person Collection| 200/204 |
-| /person/{id} | GET | Get speficic person | n/a  | Person | 200/2004         |
-| /person | POST | Creates a new entity person in the system. Expects a represention of the person in the body | Person without the Id specifield | Person | 201 / 204 |
-| /person/{id} | PUT | Modifies a person resource | Person | n/a | 201 / 204 |
-| /person/{id} | DELETE | Deletes a person resource | Person | n/a | 201 / 204 |
+| /api/v1/beers | GET | all beers in the system | n/a  | Beers Collection| 200/204 |
+| /api/v1/beers/{id} | GET | Get speficic beer | n/a  | Beers | 200/2004         |
+| /api/v1/beers | POST | Creates a new entity beer in the system. Expects a represention of the beer in the body | Beer without the Id specifield | Beer | 201 / 204 |
+| /api/v1/beers/{id} | DELETE | Deletes a beer resource | Beer | n/a | 201 / 204 |
+| /api/v1/beers/1/increment|PATCH | Modifies a person resource with increment the Quantity of Beers | Info quantity | Beer | 200 / 400  | 
+| /api/v1/beers/1/increment|PATCH | Modifies a person resource with decrement the Quantity of Beers | Info quantity | Beer | 200 / 400  |
 
 
 
 <h3> CheckList Resources </h3>
 
-| Uri | Method| Service          | Controller     | URL Example        | Body Example | Return |        
-|:----|:------|:-----------------|:---------------|:-------------------|:-------------|:-------|
-| /api/v1/beers | GET | [ ] | [ ]  | http://localhost:8080/api/v1/beers |    | [ { "id": 1, "name": "Stella Artois", "brand": "AmBev", "max": 10, "quantity": 2, "type": "LAGER"  } ] |
-| /api/v1/beers/{name} | GET | [ ] | [ ]  | http://localhost:8080/api/v1/beers/Stella Artois | | { "id": 1, "name": "Stella Artois", "brand": "AmBev",  "max": 10, "quantity": 2, "type": "LAGER" }|
-| /api/v1/beers | POST | [ ] | [ ]  | http://localhost:8080/api/v1/beers |    {  "name": "Stella Artois", "brand": "AmBev", "max": 10, "quantity": 2, "type": "LAGER" } | { "id": 1, "name": "Stella Artois", "brand": "AmBev", "max": 10, "quantity": 2, "type": "LAGER" }  |
-| /api/v1/beers/{id} | PUT | [ ] | [ ]  | http:// | | |
-| /api/v1/beers/{id} | DELETE | [ ] | [ ]  | http://localhost:8080/api/v1/beers/1 | | |
-| /api/v1/beers/1/increment{id} | PATCH | [ ] | [ ]  | http://localhost:8080/api/v1/beers/1/increment | |{ "id": 1, "name": "Stella Artois","brand": "AmBev", "max": 10, "quantity": 2, "type": "LAGER"}|
+| Checked| Uri                          | Verb                 | URL Example                                    | Body Example       | Return       |        
+| :-----:|:----------------------------:|:---------------------|:----------------------------------------------:|:-------------------|:------------:|
+| [X]    | /api/v1/beers                | GET                  | http://localhost:8080/api/v1/beers               |                  | [ { "id": 1, "name": "Stella Artois", "brand": "AmBev", "max": 10, "quantity": 2, "type": "LAGER"  } ] |
+| [X]    | /api/v1/beers/{name}         | GET                  | http://localhost:8080/api/v1/beers/Stella Artois |                  | { "id": 1, "name": "Stella Artois", "brand": "AmBev",  "max": 10, "quantity": 2, "type": "LAGER" }
+| [X]    | /api/v1/beers                | POST                 |  http://localhost:8080/api/v1/beers              | {  "name": "Stella Artois", "brand": "AmBev", "max": 10, "quantity": 2, "type": "LAGER" } | { "id": 1, "name": "Stella Artois", "brand": "AmBev", "max": 10, "quantity": 2, "type": "LAGER" }  |
+| [X]    | /api/v1/beers/{id}           | DELETE               | http://localhost:8080/api/v1/beers/1             |                  |                                                                                                     |
+| [X]    | /api/v1/beers/1/increment{id}| PATCH                | http://localhost:8080/api/v1/beers/1/increment   | { "quantity": 2 } | { "id": 1, "name": "Stella Artois", "brand": "AmBev", "max": 10, "quantity": 4, "type": "LAGER"  } |
+| [X]    | /api/v1/beers/1/decrement{id}| PATCH                | http://localhost:8080/api/v1/beers/1/decrement   | { "quantity": 2 } | { "id": 1, "name": "Stella Artois", "brand": "AmBev", "max": 10, "quantity": 0, "type": "LAGER"  } |
 
+<h3> Checklist BeerController </h3>
 
-<h3> Checklist Controller </h3>
-
-| Checked| Uri | Method| BeerController |         
+| Checked| Uri | Verb | Test |         
 | -------|:----|:------|:---------------|
 |[X]  | /api/v1/beers | GET | whenGETListWithBeersIsCalledThenOkStatusIsReturned() |
 |[X]  | /api/v1/beers | GET | whenGETListWithoutBeersIsCalledThenOkStatusIsReturned() |
 |[X]  | /api/v1/beers/{name} | GET | whenGETIsCalledWithValidNameThenOkStatusIsReturned()  | 
 |[X]  | /api/v1/beers/{name} | GET | whenGETIsCalledWithoutRegisteredNameThenNotFoundStatusIsReturned |
 |[X]  | /api/v1/beers | POST | whenPOSTIsCalledThenABeerIsCreated() | 
-|[X]  | /api/v1/beers | POST | whenPOSTIsCalledWithoutRequiredFieldThenAnErrorIsReturned() |
-|[X]  | /api/v1/beers/{id} | PUT |   | 
+|[X]  | /api/v1/beers | POST | whenPOSTIsCalledWithoutRequiredFieldThenAnErrorIsReturned() | 
 |[X]  | /api/v1/beers/{id} | DELETE | whenDELETEIsCalledWithValidIdThenNoContentStatusIsReturned() |
 |[X]  | /api/v1/beers/{id} | DELETE | whenDELETEIsCalledWithInvalidIdThenNotFoundStatusIsReturned() |
 |[X]  | /api/v1/beers/1/increment{id} | PATCH |  whenPATCHIsCalledToIncrementDiscountThenOKstatusIsReturned() | 
-
+|[X]  | /api/v1/beers/1/dement{id} | PATCH |  whenPATCHIsCalledWithInvalidBeerIdToDecrementThenNotFoundStatusIsReturned() |
 
 <h3> Checklist Service </h3>
 
@@ -119,7 +176,8 @@ Verbs Http:
 |[X]     | increment(Long id, int quantityToIncrement) | whenIncrementIsCalledThenIncrementBeerStock() |
 |[X]     | increment(Long id, int quantityToIncrement) | whenIncrementIsGreatherThanMaxThenThrowException() |
 |[X]     | increment(Long id, int quantityToIncrement) | whenIncrementAfterSumIsGreatherThanMaxThenThrowException() |
-|[X]     | increment(Long id, int quantityToIncrement) |whenIncrementIsCalledWithInvalidIdThenThrowException() |
-
-
-
+|[X]     | increment(Long id, int quantityToIncrement) | whenIncrementIsCalledWithInvalidIdThenThrowException() |
+|[X]     | decrement(Long id, int quantityToDecrement) | whenDecrementIsCalledThenDecrementBeerStock()() |
+|[X]     | decrement(Long id, int quantityToDecrement) | whenDecrementIsCalledToEmptyStockThenEmptyBeerStock() |
+|[X]     | decrement(Long id, int quantityToDecrement) | whenDecrementIsLowerThanZeroThenThrowException |
+|[X]     | decrement(Long id, int quantityToDecrement) | whenDecrementIsCalledWithInvalidIdThenThrowException() |
